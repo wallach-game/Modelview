@@ -18,6 +18,21 @@ streams it in 32 MB slices inside a Web Worker, and keeps a subsample that fits 
 Optional: `https://<you>.github.io/<repo>/?url=https://host/model.ply` loads a remote file, if that host
 allows CORS and HTTP Range requests (S3/R2/Hugging Face do; GitHub Releases does not).
 
+## Sharing a huge file
+
+**Option A – small preview inside the repo** (served by GitHub Pages, no other host):
+```sh
+node tools/decimate.mjs /path/to/huge.ply site/models/preview.ply 2000000   # ~30 MB output
+git add site/models/preview.ply && git commit -m "Add preview" && git push
+```
+Open `https://<you>.github.io/Modelview/?url=models/preview.ply`. Keep each file under 100 MB.
+
+**Option B – full file on Hugging Face** (public dataset, free, multi-GB OK):
+```sh
+tools/upload-hf.sh /path/to/huge.ply HF_USER GITHUB_USER
+```
+It uploads the file and prints the viewer link.
+
 ## Deploy on GitHub Pages
 
 1. Merge to `main`.
